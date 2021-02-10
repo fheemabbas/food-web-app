@@ -9,6 +9,7 @@ import MealCategory from "./step1";
 import SelectRestaurant from "./step2";
 import SelectDishes from "./step3";
 import Review from "./step4";
+import restaurantsData from "./data/dishes";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -26,26 +27,19 @@ function getSteps() {
   return ["Step1", "Step2", "Step3", "review"];
 }
 
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <MealCategory />;
-    case 1:
-      return <SelectRestaurant />;
-    case 2:
-      return <SelectDishes />;
-    case 3:
-      return <Review />;
-    default:
-      return "Unknown step";
-  }
-}
-
 export default function HorizontalLinearStepper() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
+  const { dishes } = restaurantsData;
+  const [mealcategory, setmealcategory] = React.useState([]);
+  const [restaurant, setRestaurants] = React.useState([]);
+  const [dish, setDish] = React.useState([]);
   const steps = getSteps();
-
+  console.log("mealcategory:", mealcategory);
+  const res = dishes.filter(function (activeCompanydata) {
+    return activeCompanydata.availableMeals.includes(mealcategory.value);
+  });
+  console.log(res);
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -53,7 +47,27 @@ export default function HorizontalLinearStepper() {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return (
+          <MealCategory
+            dishes={dishes}
+            setmealcategory={setmealcategory}
+            mealcategory={mealcategory}
+            setRestaurants={setRestaurants}
+          />
+        );
+      case 1:
+        return <SelectRestaurant />;
+      case 2:
+        return <SelectDishes />;
+      case 3:
+        return <Review />;
+      default:
+        return "Unknown step";
+    }
+  }
   return (
     <div className={classes.root}>
       <Stepper activeStep={activeStep}>
@@ -92,6 +106,7 @@ export default function HorizontalLinearStepper() {
             <Button
               variant="contained"
               color="primary"
+              type="submit"
               onClick={handleNext}
               className={classes.button}
             >
