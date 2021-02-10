@@ -1,9 +1,12 @@
 import React from "react";
 import "./App.css";
-import restaurantsData from "./componants/data/dishes";
+import HorizontalLinearStepper from "./componants/stepsForm";
 function App() {
-  console.log("data:", restaurantsData.dishes);
-  return <div className="App">hello World</div>;
+  return (
+    <div className="App">
+      <HorizontalLinearStepper />
+    </div>
+  );
 }
 
 export default App;
